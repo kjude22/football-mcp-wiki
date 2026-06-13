@@ -14,3 +14,7 @@ scratch/
 
 # Local ZIP package (rebuilt during submission)
 Assignment_2.zip
+
+# Assignment PDFs (keep locally, but ignore on GitHub)
+*.pdf
+

@@ -1,6 +1,6 @@
 # LLM Wiki Repository & Multi-Agent Ingestion Pipeline
 
-A premium-grade, self-contained, and compounding knowledge management system built upon **Andrej Karpathy's LLM Wiki philosophy** and the architectural lessons of the **Agentic Coding Basics** curriculum (CSE3308 System Analysis & Design).
+A premium-grade, self-contained, and compounding knowledge management system built upon **Andrej Karpathy's LLM Wiki philosophy** and the architectural lessons of the **Agentic Coding Basics** curriculum.
 
 ---
 
