@@ -1,0 +1,8 @@
+- [ ] Create `wiki/model_context_protocol.md`
+  - **Input:** Raw scraped MCP content.
+  - **Output:** `wiki/model_context_protocol.md` file.
+  - **AC:** YAML Frontmatter present, tags are `["mcp", "ai", "protocol"]`, title is `"Model Context Protocol"`.
+- [ ] Update `wiki/index.md` navigation map.
+  - **Input:** `wiki/model_context_protocol.md` existence.
+  - **Output:** Modified `wiki/index.md` file.
+  - **AC:** Hyperlink successfully points to `/wiki/model_context_protocol.md`.

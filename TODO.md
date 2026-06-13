@@ -1,0 +1,3 @@
+- [ ] Create `wiki/model_context_protocol.md` with complete reference.
+- [ ] Add YAML Frontmatter.
+- [ ] Update `wiki/index.md` navigation map.

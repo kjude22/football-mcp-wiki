@@ -1,0 +1,16 @@
+# Environment variables (security sensitive)
+.env
+
+# Python caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Agent-specific folders
+.pool/
+.system_generated/
+scratch/
+
+# Local ZIP package (rebuilt during submission)
+Assignment_2.zip

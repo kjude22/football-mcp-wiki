@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Tactics & Player Wiki Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-emoji">⚽</span>
+                <h2>FootyWiki</h2>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="active" id="btnWikiAll" onclick="filterWiki('all')">📚 전체 지식</a>
+                <a href="#" id="btnWikiPlayer" onclick="filterWiki('player')">🏃‍♂️ 선수 프로필</a>
+                <a href="#" id="btnWikiClub" onclick="filterWiki('club')">🛡️ 클럽 분석</a>
+                <a href="#" id="btnWikiTactics" onclick="filterWiki('tactics')">💡 전술 전형</a>
+                <a href="#" id="btnRawTab" onclick="switchView('raw')">📄 원본 문서 (Raw)</a>
+                <a href="#" id="btnSchemaTab" onclick="switchView('schema')">📐 위키 스키마 (Schema)</a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>MCP Wiki v1.0</p>
+                <div class="status-badge"><span class="dot green"></span> MCP Server Active</div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard View -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-title">
+                    <h1>Football Tactics & Player Wiki</h1>
+                    <p class="subtitle">사전 컴파일된 지식 기반 축구 위키 대시보드</p>
+                </div>
+                <!-- Health Scorecard Widget -->
+                <div class="health-card" id="healthScorecard">
+                    <div class="health-score-ring">
+                        <span id="healthValue">--%</span>
+                    </div>
+                    <div class="health-details">
+                        <h4>Wiki Health Score</h4>
+                        <p id="healthStats">불러오는 중...</p>
+                        <button class="btn btn-sm btn-outline" onclick="auditWiki()">🔍 실시간 감사 실행</button>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-body">
+                <!-- 1. Wiki Cards View -->
+                <div id="wikiView">
+                    <div class="cards-grid" id="cardsGrid">
+                        <!-- Cards will be dynamically injected by JavaScript -->
+                        <div class="loading-state">지식을 불러오고 있습니다...</div>
+                    </div>
+                </div>
+
+                <!-- 2. Raw Documents View (Hidden by default) -->
+                <div id="rawView" style="display: none;">
+                    <h2 class="section-title">📄 raw/ 디렉토리 내 원본 소스 문서</h2>
+                    <p class="section-desc">에이전트가 지식을 추출하고 컴파일하기 전의 미가공 자료입니다.</p>
+                    <div class="raw-container">
+                        <div class="raw-list" id="rawList">
+                            <!-- Raw files list will be injected here -->
+                        </div>
+                        <div class="raw-preview" id="rawPreview">
+                            <div class="preview-placeholder">목록에서 원본 파일을 선택하면 본문이 여기에 표시됩니다.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Wiki Schema View (Hidden by default) -->
+                <div id="schemaView" style="display: none;">
+                    <h2 class="section-title">📐 schema/ 위키 메타데이터 스키마</h2>
+                    <p class="section-desc">지식 노드 적재 시 에이전트가 반드시 준수해야 하는 YAML 및 포맷 사양입니다.</p>
+                    <div class="schema-container" id="schemaContainer">
+                        <!-- Schema content will be injected here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Chatbot Agent Interface (Right Panel) -->
+        <section class="agent-panel">
+            <div class="agent-header">
+                <div class="agent-avatar">🤖</div>
+                <div class="agent-title-info">
+                    <h3>FootyAgent</h3>
+                    <p class="status-text">LLM Wiki 관리 에이전트</p>
+                </div>
+            </div>
+            
+            <div class="chat-history" id="chatHistory">
+                <div class="chat-message agent">
+                    안녕하세요! 저는 축구 위키를 전담하는 **AI 에이전트**입니다. 
+                    우측 대화창을 통해 위키의 내용을 탐색하거나, 새로운 선수를 추가할 수 있습니다. 
+                    제가 동작할 때는 **MCP 도구**를 실시간으로 사용합니다.
+                    
+                    <div class="agent-suggestions">
+                        <button class="suggest-btn" onclick="sendSuggested('Search son')">🔍 손흥민 검색</button>
+                        <button class="suggest-btn" onclick="sendSuggested('Read gegenpressing')">💡 게겐프레싱 읽기</button>
+                        <button class="suggest-btn" onclick="sendSuggested('Check health')">🛡️ 위키 건강도 검사</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <div class="tool-call-indicator" id="toolCallIndicator" style="display: none;">
+                    <span class="pulse-dot"></span> MCP Tool Calling: <span id="toolName">search_wiki</span>
+                </div>
+                <form id="chatForm" onsubmit="handleChatSubmit(event)">
+                    <input type="text" id="chatInput" placeholder="에이전트에게 위키 관리 명령하기..." autocomplete="off">
+                    <button type="submit" class="btn btn-primary">전송</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Detail View Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="tag" id="modalTag">Player</span>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Markdown Content rendered as simple HTML -->
+            </div>
+            <div class="modal-footer">
+                <h5>🔗 연결된 지식 링크</h5>
+                <div class="connections-list" id="modalConnections">
+                    <!-- Links will be listed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
